@@ -59,6 +59,8 @@ model User {
   createdProspectActivities ProspectActivity[] @relation("ProspectActivityCreatedBy")
   technicien         Technicien?
   notifications      Notification[]
+  sentMessages       Message[]         @relation("MessageSender")
+  receivedMessages   Message[]         @relation("MessageRecipient")
 
   @@map("users")
 }
@@ -582,6 +584,9 @@ model Salary {
   createdAt            DateTime @default(now()) @map("created_at")
 
   employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  
+  // Ajout pour compléter la relation avec LoanPayment
+  loanPayments LoanPayment[]
 
   @@map("salaries")
 }
@@ -916,8 +921,6 @@ model Intervention {
   missionId      String    @map("mission_id")
   statut         String    @default("planifiee")
   commentaire    String?
-  statut         String    @default("planifiee")
-  commentaire    String?
   createdAt      DateTime  @default(now()) @map("created_at")
   updatedAt      DateTime  @updatedAt @map("updated_at")
 
@@ -935,8 +938,8 @@ model TechnicienIntervention {
   interventionId Int     @map("intervention_id")
   role           String  @default("assistant")
   commentaire    String?
-  createdAt      DateTime @default(now())
   createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
 
   technicien   Technicien   @relation(fields: [technicienId], references: [id])
   intervention Intervention @relation(fields: [interventionId], references: [id])
@@ -1054,4 +1057,42 @@ model Notification {
   user User @relation(fields: [userId], references: [id])
 
   @@map("notifications")
+}
+
+model Message {
+  id            Int       @id @default(autoincrement())
+  senderId      Int       @map("sender_id")
+  recipientId   Int       @map("recipient_id")
+  subject       String
+  content       String
+  priority      String    @default("normal") // low, normal, high, urgent
+  type          String    @default("internal") // internal, external, system
+  status        String    @default("unread") // unread, read, replied, archived
+  readAt        DateTime? @map("read_at")
+  archivedAt    DateTime? @map("archived_at")
+  parentMessageId Int?    @map("parent_message_id")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  sender         User              @relation("MessageSender", fields: [senderId], references: [id])
+  recipient      User              @relation("MessageRecipient", fields: [recipientId], references: [id])
+  parentMessage  Message?          @relation("MessageReplies", fields: [parentMessageId], references: [id])
+  replies        Message[]         @relation("MessageReplies")
+  attachments    MessageAttachment[]
+
+  @@map("messages")
+}
+
+model MessageAttachment {
+  id        Int      @id @default(autoincrement())
+  messageId Int      @map("message_id")
+  filename  String
+  url       String
+  size      Int?
+  mimeType  String?  @map("mime_type")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@map("message_attachments")
 }

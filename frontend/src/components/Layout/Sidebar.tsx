@@ -14,8 +14,9 @@ import {
   DollarSign,
   BarChart3,
   Calendar,
+  Wrench,
   Target,
-  Wrench
+  MessageSquare
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { NavigationItem } from '../../types';
@@ -87,6 +88,12 @@ const navigationItems: NavigationItem[] = [
     href: '/reports',
     icon: BarChart3,
     permission: 'reports.financial',
+  },
+  {
+    name: 'Messages',
+    href: '/messages',
+    icon: MessageSquare,
+    permission: 'messages.read',
   },
   {
     name: 'Ressources Humaines',
@@ -234,7 +241,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
         </div>
       </div>
       
-      <nav className="mt-8">
+      <nav className="mt-8 h-full overflow-y-auto scrollbar-hide pb-20">
         <div className="px-4 space-y-2">
           {visibleItems.map((item) => (
             <div key={item.name}>

@@ -51,6 +51,7 @@ router.use('/v1/employees', employeeRoutes);
 router.use('/v1/contracts', contractRoutes);
 router.use('/v1/salaries', salaryRoutes);
 router.use('/v1/leaves', leaveRoutes);
+router.use('/v1/loans', require('./loans').default);
 router.use('/v1/expenses', expenseRoutes);
 router.use('/v1/services', serviceRoutes);
 router.use('/v1/prospects', prospectRoutes);
@@ -61,6 +62,7 @@ router.use('/v1/missions', missionRoutes);
 router.use('/v1/materiels', materielRoutes);
 router.use('/v1/rapports', rapportRoutes);
 router.use('/v1/notifications', notificationRoutes);
+router.use('/v1/messages', require('./messages').default);
 
 // Middleware pour logger les routes non trouvées
 router.use('*', (req, res) => {

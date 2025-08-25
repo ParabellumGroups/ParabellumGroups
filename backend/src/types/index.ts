@@ -148,3 +148,34 @@ export interface EntreeMateriel {
   facture?: string;
   commentaire?: string;
 }
+
+// Types pour les messages
+export interface Message {
+  id: number;
+  senderId: number;
+  recipientId: number;
+  subject: string;
+  content: string;
+  priority: 'low' | 'normal' | 'high' | 'urgent';
+  type: 'internal' | 'external' | 'system';
+  status: 'unread' | 'read' | 'replied' | 'archived';
+  readAt?: Date;
+  archivedAt?: Date;
+  parentMessageId?: number;
+  createdAt: Date;
+  updatedAt: Date;
+  sender?: User;
+  recipient?: User;
+  attachments?: MessageAttachment[];
+  replies?: Message[];
+}
+
+export interface MessageAttachment {
+  id: number;
+  messageId: number;
+  filename: string;
+  url: string;
+  size?: number;
+  mimeType?: string;
+  createdAt: Date;
+}

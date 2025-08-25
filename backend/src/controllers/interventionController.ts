@@ -180,7 +180,8 @@ export const createIntervention = async (req: AuthenticatedRequest, res: Respons
       dateHeureFin,
       missionId,
       commentaire,
-      technicienIds
+      techniciens,
+      materiels
     } = req.body;
 
     // Vérifier que la mission existe
@@ -195,6 +196,29 @@ export const createIntervention = async (req: AuthenticatedRequest, res: Respons
       });
     }
 
+    // Vérifier le stock des matériels
+    if (materiels && materiels.length > 0) {
+      for (const materielItem of materiels) {
+        const materiel = await prisma.materiel.findUnique({
+          where: { id: materielItem.materielId }
+        });
+
+        if (!materiel) {
+          return res.status(404).json({
+            success: false,
+            message: `Matériel ${materielItem.materielId} non trouvé`
+          });
+        }
+
+        if (materiel.quantiteDisponible < materielItem.quantite) {
+          return res.status(400).json({
+            success: false,
+            message: `Stock insuffisant pour ${materiel.designation}. Disponible: ${materiel.quantiteDisponible}`
+          });
+        }
+      }
+    }
+
     // Calculer la durée si date de fin fournie
     let duree = null;
     if (dateHeureFin) {
@@ -203,37 +227,71 @@ export const createIntervention = async (req: AuthenticatedRequest, res: Respons
       duree = Math.round((fin.getTime() - debut.getTime()) / (1000 * 60)); // en minutes
     }
 
-    const intervention = await prisma.intervention.create({
-      data: {
-        dateHeureDebut: new Date(dateHeureDebut),
-        dateHeureFin: dateHeureFin ? new Date(dateHeureFin) : null,
-        duree,
-        missionId,
-        statut: dateHeureFin ? 'terminee' : 'en_cours',
-        commentaire,
-        techniciens: technicienIds ? {
-          create: technicienIds.map((technicienId: number, index: number) => ({
-            technicienId,
-            role: index === 0 ? 'responsable' : 'assistant'
-          }))
-        } : undefined
-      },
-      include: {
-        mission: {
-          include: {
-            client: true
+    // Transaction pour créer l'intervention et gérer le stock
+    const intervention = await prisma.$transaction(async (tx) => {
+      // Créer l'intervention
+      const newIntervention = await tx.intervention.create({
+        data: {
+          dateHeureDebut: new Date(dateHeureDebut),
+          dateHeureFin: dateHeureFin ? new Date(dateHeureFin) : null,
+          duree,
+          missionId,
+          statut: dateHeureFin ? 'terminee' : 'planifiee',
+          commentaire,
+          techniciens: {
+            create: techniciens.map((tech: any) => ({
+              technicienId: tech.technicienId,
+              role: tech.role || 'Assistant',
+              commentaire: tech.commentaire
+            }))
           }
         },
-        techniciens: {
-          include: {
-            technicien: {
-              include: {
-                specialite: true
+        include: {
+          mission: {
+            include: {
+              client: true
+            }
+          },
+          techniciens: {
+            include: {
+              technicien: {
+                include: {
+                  specialite: true
+                }
               }
             }
           }
         }
+      });
+
+      // Créer les sorties de matériel et déduire du stock
+      if (materiels && materiels.length > 0) {
+        for (const materielItem of materiels) {
+          // Créer la sortie
+          await tx.sortieMateriel.create({
+            data: {
+              materielId: materielItem.materielId,
+              interventionId: newIntervention.id,
+              technicienId: techniciens[0].technicienId, // Premier technicien par défaut
+              quantite: materielItem.quantite,
+              motif: 'Intervention',
+              commentaire: materielItem.commentaire
+            }
+          });
+
+          // Déduire du stock
+          await tx.materiel.update({
+            where: { id: materielItem.materielId },
+            data: {
+              quantiteDisponible: {
+                decrement: materielItem.quantite
+              }
+            }
+          });
+        }
       }
+
+      return newIntervention;
     });
 
     res.status(201).json({
@@ -491,7 +549,7 @@ export const endIntervention = async (req: AuthenticatedRequest, res: Response) 
 export const assignTechnicien = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { id } = req.params;
-    const { technicienId, role = 'assistant', commentaire } = req.body;
+    const { technicienId, role = 'Assistant', commentaire } = req.body;
 
     const intervention = await prisma.intervention.findUnique({
       where: { id: Number(id) }
@@ -610,5 +668,7 @@ export const validateIntervention = [
   body('dateHeureDebut').isISO8601().withMessage('Date de début invalide'),
   body('dateHeureFin').optional().isISO8601().withMessage('Date de fin invalide'),
   body('missionId').notEmpty().withMessage('Mission requise'),
-  body('technicienIds').optional().isArray().withMessage('Liste de techniciens invalide')
+  body('techniciens').isArray({ min: 1 }).withMessage('Au moins un technicien requis'),
+  body('techniciens.*.technicienId').isInt().withMessage('ID technicien invalide'),
+  body('techniciens.*.role').isIn(['Principal', 'Assistant']).withMessage('Rôle invalide')
 ];

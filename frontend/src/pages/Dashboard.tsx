@@ -13,7 +13,9 @@ import {
   Target,
   Calendar,
   Filter,
-  RefreshCw
+  RefreshCw,
+  Package,
+  Eye
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { createCrudService } from '../services/api';
@@ -194,6 +196,66 @@ export const Dashboard: React.FC = () => {
         ))}
       </div>
 
+      {/* Alertes et actions rapides */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Alertes importantes */}
+        <div className="lg:col-span-2">
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+              <AlertCircle className="h-5 w-5 text-orange-500 mr-2" />
+              Alertes et Notifications
+            </h3>
+            <div className="space-y-3">
+              {/* Alertes stock */}
+              <div className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg">
+                <div className="flex items-center">
+                  <Package className="h-5 w-5 text-orange-600 mr-3" />
+                  <div>
+                    <div className="text-sm font-medium text-orange-800 dark:text-orange-200">Stock faible</div>
+                    <div className="text-xs text-orange-600 dark:text-orange-300">3 articles sous le seuil d'alerte</div>
+                  </div>
+                </div>
+                <button className="text-orange-600 hover:text-orange-800 dark:text-orange-400 dark:hover:text-orange-300">
+                  <Eye className="h-4 w-4" />
+                </button>
+              </div>
+              
+              {/* Interventions en cours */}
+              <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                <div className="flex items-center">
+                  <Calendar className="h-5 w-5 text-blue-600 mr-3" />
+                  <div>
+                    <div className="text-sm font-medium text-blue-800 dark:text-blue-200">Interventions en cours</div>
+                    <div className="text-xs text-blue-600 dark:text-blue-300">5 interventions actives</div>
+                  </div>
+                </div>
+                <button className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+                  <Eye className="h-4 w-4" />
+                </button>
+              </div>
+              
+              {/* Rapports en attente */}
+              <div className="flex items-center justify-between p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                <div className="flex items-center">
+                  <FileText className="h-5 w-5 text-yellow-600 mr-3" />
+                  <div>
+                    <div className="text-sm font-medium text-yellow-800 dark:text-yellow-200">Rapports en attente</div>
+                    <div className="text-xs text-yellow-600 dark:text-yellow-300">2 rapports à valider</div>
+                  </div>
+                </div>
+                <button className="text-yellow-600 hover:text-yellow-800 dark:text-yellow-400 dark:hover:text-yellow-300">
+                  <Eye className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Actions rapides */}
+        <div>
+          <QuickActions />
+        </div>
+      </div>
       {/* Graphiques principaux */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Pipeline CRM */}

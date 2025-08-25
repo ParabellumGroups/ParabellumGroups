@@ -9,9 +9,15 @@ async function main() {
   // Nettoyer la base de données dans le bon ordre pour respecter les contraintes de clé étrangère
   console.log('🧹 Nettoyage de la base de données...');
   
-  // D'abord les tables avec des clés étrangères vers d'autres tables
+  // D'abord les tables les plus dépendantes
+  await prisma.loanPayment.deleteMany();
+  await prisma.loan.deleteMany();
+  await prisma.salary.deleteMany();
+  await prisma.leaveRequest.deleteMany();
+  await prisma.contract.deleteMany();
+  await prisma.employee.deleteMany();
+
   await prisma.paymentAllocation.deleteMany();
-  await prisma.payment.deleteMany();
   await prisma.reminder.deleteMany();
   await prisma.invoiceItem.deleteMany();
   await prisma.invoice.deleteMany();
@@ -21,20 +27,25 @@ async function main() {
   await prisma.recurringInvoiceItem.deleteMany();
   await prisma.recurringInvoice.deleteMany();
   await prisma.customerAddress.deleteMany();
+  await prisma.mission.deleteMany();
+  await prisma.payment.deleteMany();
+
+  // Supprimer les prospects et activités liées
+  await prisma.prospectActivity.deleteMany();
+  await prisma.prospect.deleteMany();
+
+// Maintenant tu peux supprimer les clients
   await prisma.customer.deleteMany();
-  await prisma.productPrice.deleteMany();
-  await prisma.product.deleteMany();
-  await prisma.expense.deleteMany();
-  await prisma.supplier.deleteMany();
-  await prisma.accountingEntry.deleteMany();
-  await prisma.cashFlow.deleteMany();
-  await prisma.auditLog.deleteMany();
-  
+
   // Ensuite les utilisateurs
   await prisma.user.deleteMany();
-  
-  // Enfin les services
+
+  // Ensuite les services
   await prisma.service.deleteMany();
+
+  // Supprimer les adresses clients qui n'ont plus de client (sécurité)
+  await prisma.customerAddress.deleteMany(); // <-- déplace cette ligne ici, APRÈS customer.deleteMany()
+
 
   // Créer les services
   console.log('🏢 Création des services...');

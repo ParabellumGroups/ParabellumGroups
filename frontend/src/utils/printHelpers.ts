@@ -1,3 +1,5 @@
+// Utilitaires pour l'impression et l'export
+
 export const printHelpers = {
   // Imprimer une facture
   printInvoice: (invoice: any) => {

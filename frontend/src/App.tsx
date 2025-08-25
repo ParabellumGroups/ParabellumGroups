@@ -21,12 +21,15 @@ import { EmployeeList } from './pages/HR/EmployeeList';
 import { LeaveManagement } from './pages/HR/LeaveManagement';
 import { SalaryManagement } from './pages/HR/SalaryManagement';
 import { LoanManagement } from './pages/HR/LoanManagement';
+import { ContractList } from './pages/HR/ContractList';
 import { ProspectionWorkflow } from './pages/Commercial/ProspectionWorkflow';
 import { SpecialiteList } from './pages/Services/SpecialiteList';
 import { TechnicienList } from './pages/Services/TechnicienList';
 import { MissionList } from './pages/Services/MissionList';
 import { MaterielList } from './pages/Services/MaterielList';
 import { InterventionList } from './pages/Services/InterventionList';
+import { ReportList } from './pages/Reports/ReportList';
+import { MessageList } from './pages/Messages/MessageList';
 
 // Créer le client React Query
 const queryClient = new QueryClient({
@@ -115,9 +118,19 @@ function App() {
                   path="reports" 
                   element={
                     <ProtectedRoute permission="reports.financial">
-                      <ReportDashboard />
+                      <ReportList />
                     </ProtectedRoute>
                   } 
+                />
+                
+                {/* Messages */}
+                <Route
+                  path="messages" 
+                  element={
+                    <ProtectedRoute permission="messages.read">
+                      <MessageList />
+                    </ProtectedRoute>
+                  }
                 />
                 
                 {/* Ressources Humaines */}
@@ -141,7 +154,7 @@ function App() {
                   path="hr/contracts"
                   element={
                     <ProtectedRoute permission="contracts.read">
-                      <div>Gestion des contrats (à implémenter)</div>
+                      <ContractList />
                     </ProtectedRoute>
                   }
                 />

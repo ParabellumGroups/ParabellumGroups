@@ -8,7 +8,8 @@ import {
   Package,
   CreditCard,
   BarChart3,
-  Settings
+  Settings,
+  Calendar
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -80,6 +81,24 @@ export const QuickActions: React.FC = () => {
       bgColor: 'bg-gray-100 dark:bg-gray-700',
       href: '/reports',
       permission: 'reports.sales'
+    },
+    {
+      title: 'Nouvelle Mission',
+      description: 'Créer une mission',
+      icon: FileText,
+      color: 'text-orange-600',
+      bgColor: 'bg-orange-100 dark:bg-orange-900',
+      href: '/services/missions',
+      permission: 'missions.create'
+    },
+    {
+      title: 'Nouvelle Intervention',
+      description: 'Planifier intervention',
+      icon: Calendar,
+      color: 'text-teal-600',
+      bgColor: 'bg-teal-100 dark:bg-teal-900',
+      href: '/services/interventions',
+      permission: 'interventions.create'
     }
   ];
 

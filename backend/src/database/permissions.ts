@@ -119,7 +119,13 @@ export const PERMISSIONS_LIST = {
   'rapports.create': 'Créer des rapports de mission',
   'rapports.read': 'Consulter les rapports de mission',
   'rapports.update': 'Modifier les rapports de mission',
-  'rapports.validate': 'Valider les rapports de mission'
+  'rapports.validate': 'Valider les rapports de mission',
+
+  // Messages
+  'messages.create': 'Créer des messages',
+  'messages.read': 'Consulter les messages',
+  'messages.update': 'Modifier les messages',
+  'messages.delete': 'Supprimer les messages'
 } as const;
 
 // Permissions par rôle
@@ -149,7 +155,8 @@ export const ROLE_PERMISSIONS = {
     'missions.create', 'missions.read', 'missions.update',
     'interventions.create', 'interventions.read', 'interventions.update',
     'materiels.create', 'materiels.read', 'materiels.update',
-    'rapports.read', 'rapports.validate'
+    'rapports.read', 'rapports.validate',
+    'messages.create', 'messages.read', 'messages.update'
   ],
   
   EMPLOYEE: [
@@ -159,7 +166,8 @@ export const ROLE_PERMISSIONS = {
     'leaves.create', 'leaves.read',
     'loans.read',
     'techniciens.read', 'missions.read', 'interventions.read', 'materiels.read',
-    'rapports.create', 'rapports.read'
+    'rapports.create', 'rapports.read',
+    'messages.create', 'messages.read'
   ],
   
   ACCOUNTANT: [
@@ -167,7 +175,8 @@ export const ROLE_PERMISSIONS = {
     'invoices.update', 'invoices.send', 'payments.create', 'payments.read',
     'payments.update', 'expenses.create', 'expenses.read', 'expenses.update',
     'reports.financial', 'salaries.create', 'salaries.read', 'salaries.update',
-    'loans.create', 'loans.read', 'loans.update'
+    'loans.create', 'loans.read', 'loans.update',
+    'messages.create', 'messages.read'
   ]
 };
 
