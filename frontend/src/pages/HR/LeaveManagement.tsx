@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search, Calendar, CheckCircle, XCircle, Clock, User } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { createCrudService } from '../../services/api';
+import { CreateLeaveModal } from '../../components/Modals/CreateLeaveModal';
 
 const leaveService = createCrudService('leaves');
 
@@ -147,6 +148,12 @@ export const LeaveManagement: React.FC = () => {
           </select>
         </div>
       </div>
+
+      {/* Modales */}
+      <CreateLeaveModal 
+        isOpen={showCreateModal} 
+        onClose={() => setShowCreateModal(false)} 
+      />
 
       {/* Liste des demandes */}
       <div className="bg-white shadow rounded-lg overflow-hidden">

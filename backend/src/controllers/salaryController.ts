@@ -415,6 +415,83 @@ export const getSalaryReport = async (req: AuthenticatedRequest, res: Response) 
   }
 };
 
+export const paySalary = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { paymentDate, paymentMethod, reference, notes } = req.body;
+
+    const salary = await prisma.salary.findUnique({
+      where: { id: Number(id) },
+      include: {
+        employee: {
+          include: {
+            service: true
+          }
+        }
+      }
+    });
+
+    if (!salary) {
+      return res.status(404).json({
+        success: false,
+        message: 'Salaire non trouvé'
+      });
+    }
+
+    if (salary.status === 'PAID') {
+      return res.status(400).json({
+        success: false,
+        message: 'Ce salaire a déjà été payé'
+      });
+    }
+
+    // Mettre à jour le statut du salaire
+    const updatedSalary = await prisma.salary.update({
+      where: { id: Number(id) },
+      data: {
+        status: 'PAID',
+        paymentDate: paymentDate ? new Date(paymentDate) : new Date(),
+        paymentMethod,
+        reference,
+        notes: notes ? `${salary.notes || ''}\nPaiement: ${notes}` : salary.notes
+      },
+      include: {
+        employee: {
+          include: {
+            service: true
+          }
+        }
+      }
+    });
+
+    // Créer l'écriture de trésorerie pour le paiement
+    await prisma.cashFlow.create({
+      data: {
+        transactionDate: paymentDate ? new Date(paymentDate) : new Date(),
+        type: 'OUTFLOW',
+        amount: salary.netSalary,
+        description: `Paiement salaire ${salary.employee.firstName} ${salary.employee.lastName}`,
+        category: 'Salaires',
+        sourceDocumentType: 'SALARY',
+        sourceDocumentId: salary.id,
+        createdBy: req.user!.userId
+      }
+    });
+
+    res.json({
+      success: true,
+      data: updatedSalary,
+      message: 'Salaire marqué comme payé'
+    });
+  } catch (error) {
+    console.error('Erreur lors du paiement du salaire:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Erreur interne du serveur'
+    });
+  }
+};
+
 // Fonction utilitaire pour créer les écritures comptables de salaire
 async function createSalaryAccountingEntries(
   salaryId: number,

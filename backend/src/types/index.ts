@@ -1,4 +1,5 @@
 export * from '../../../shared/types';
+import { Request } from 'express';
 
 // Types spécifiques au backend
 export interface JWTPayload {
@@ -27,4 +28,123 @@ export interface AuditLogData {
   details?: any;
   ipAddress?: string;
   userAgent?: string;
+}
+
+// Types pour les modules de service
+export interface Specialite {
+  id: number;
+  libelle: string;
+  description?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Technicien {
+  id: number;
+  nom: string;
+  prenom: string;
+  contact: string;
+  specialiteId: number;
+  utilisateurId?: number;
+  isActive: boolean;
+  specialite?: Specialite;
+  utilisateur?: User;
+}
+
+export interface Mission {
+  numIntervention: string;
+  natureIntervention: string;
+  objectifDuContrat: string;
+  description?: string;
+  priorite?: string;
+  statut?: string;
+  dateSortieFicheIntervention: Date;
+  clientId: number;
+  client?: any;
+  interventions?: Intervention[];
+}
+
+export interface Intervention {
+  id: number;
+  dateHeureDebut: Date;
+  dateHeureFin?: Date;
+  duree?: number;
+  missionId: string;
+  statut: string;
+  commentaire?: string;
+  mission?: Mission;
+  techniciens?: TechnicienIntervention[];
+}
+
+export interface TechnicienIntervention {
+  id: number;
+  technicienId: number;
+  interventionId: number;
+  role: string;
+  commentaire?: string;
+  technicien?: Technicien;
+}
+
+export interface RapportMission {
+  id: number;
+  titre: string;
+  contenu: string;
+  interventionId?: number;
+  technicienId: number;
+  missionId: string;
+  statut: string;
+  dateValidation?: Date;
+  commentaire?: string;
+  images?: RapportImage[];
+}
+
+export interface RapportImage {
+  id: number;
+  rapportId: number;
+  url: string;
+  description?: string;
+  ordre: number;
+}
+
+export interface Materiel {
+  id: number;
+  reference: string;
+  designation: string;
+  description?: string;
+  quantiteTotale: number;
+  quantiteDisponible: number;
+  seuilAlerte: number;
+  emplacement?: string;
+  categorie: string;
+  prixUnitaire?: number;
+  fournisseur?: string;
+  dateAchat?: Date;
+  garantie?: string;
+  statut: string;
+}
+
+export interface SortieMateriel {
+  id: number;
+  materielId: number;
+  interventionId: number;
+  technicienId: number;
+  quantite: number;
+  dateSortie: Date;
+  motif?: string;
+  retourne: boolean;
+  dateRetour?: Date;
+  quantiteRetour?: number;
+  commentaire?: string;
+}
+
+export interface EntreeMateriel {
+  id: number;
+  materielId: number;
+  quantite: number;
+  dateEntree: Date;
+  source: string;
+  prixTotal?: number;
+  fournisseur?: string;
+  facture?: string;
+  commentaire?: string;
 }

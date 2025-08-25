@@ -4,7 +4,7 @@
 
 ### Prérequis Système
 - **Node.js** : Version 18.0.0 ou supérieure
-- **npm** : Version 8.0.0 ou supérieure
+- **pnpm** : Version 8.0.0 ou supérieure
 - **Git** : Pour le clonage du repository
 - **Navigateur moderne** : Chrome, Firefox, Safari, Edge
 
@@ -14,8 +14,8 @@
 node --version
 # Doit afficher v18.0.0 ou supérieur
 
-# Vérifier npm
-npm --version
+# Vérifier ppnpm
+pnpm --version
 # Doit afficher 8.0.0 ou supérieur
 
 # Vérifier Git
@@ -37,7 +37,7 @@ cd facturation-app
 cd backend
 
 # Installer les dépendances
-npm install
+pnpm install
 
 # Copier le fichier d'environnement
 cp .env.example .env
@@ -49,10 +49,10 @@ npx prisma generate
 npx prisma migrate dev
 
 # Insérer les données de démonstration
-npm run seed
+pnpm run seed
 
 # Démarrer le serveur de développement
-npm run dev
+pnpm run dev
 ```
 
 Le backend sera accessible sur `http://localhost:3001`
@@ -64,10 +64,10 @@ Le backend sera accessible sur `http://localhost:3001`
 cd frontend
 
 # Installer les dépendances
-npm install
+pnpm install
 
 # Démarrer le serveur de développement
-npm run dev
+pnpm run dev
 ```
 
 Le frontend sera accessible sur `http://localhost:5173`
@@ -125,7 +125,7 @@ npx prisma generate
 npx prisma migrate dev --name init
 
 # Insérer les données de test
-npm run seed
+pnpm run seed
 ```
 
 ### Visualisation
@@ -141,7 +141,7 @@ Accessible sur `http://localhost:5555`
 # Supprimer la base et recréer
 rm database.sqlite
 npx prisma migrate dev
-npm run seed
+pnpm run seed
 ```
 
 ## 👤 Comptes de Démonstration
@@ -162,21 +162,21 @@ Après le seeding, ces comptes sont disponibles :
 
 ### Backend
 ```bash
-npm run dev          # Serveur de développement avec hot-reload
-npm run build        # Build pour la production
-npm run start        # Démarrage en production
-npm run test         # Exécution des tests
-npm run migrate      # Migrations de base de données
-npm run generate     # Génération du client Prisma
-npm run seed         # Insertion des données de test
+pnpm run dev          # Serveur de développement avec hot-reload
+pnpm run build        # Build pour la production
+pnpm run start        # Démarrage en production
+pnpm run test         # Exécution des tests
+pnpm run migrate      # Migrations de base de données
+pnpm run generate     # Génération du client Prisma
+pnpm run seed         # Insertion des données de test
 ```
 
 ### Frontend
 ```bash
-npm run dev          # Serveur de développement
-npm run build        # Build pour la production
-npm run preview      # Aperçu du build de production
-npm run lint         # Vérification du code
+pnpm run dev          # Serveur de développement
+pnpm run build        # Build pour la production
+pnpm run preview      # Aperçu du build de production
+pnpm run lint         # Vérification du code
 ```
 
 ## 🐛 Résolution des Problèmes
@@ -196,14 +196,14 @@ npx kill-port 3001
 cd backend
 rm database.sqlite
 npx prisma migrate dev
-npm run seed
+pnpm run seed
 ```
 
 ### Erreur de Dépendances
 ```bash
 # Nettoyer et réinstaller
 rm -rf node_modules package-lock.json
-npm install
+pnpm install
 ```
 
 ### Erreur de CORS
@@ -215,11 +215,11 @@ Vérifiez que l'URL frontend est correcte dans la configuration CORS du backend.
 ```bash
 # Build du frontend
 cd frontend
-npm run build
+pnpm run build
 
 # Build du backend
 cd ../backend
-npm run build
+pnpm run build
 ```
 
 ### 2. Variables d'Environnement Production
@@ -240,11 +240,11 @@ SMTP_PASS="mot-de-passe-securise"
 ```bash
 # Backend
 cd backend
-npm run start
+pnpm run start
 
 # Frontend (servir les fichiers statiques)
 cd frontend
-npm run preview
+pnpm run preview
 # Ou utiliser un serveur web comme nginx
 ```
 
@@ -271,11 +271,11 @@ npx prisma db seed
 ```bash
 # Backend
 cd backend
-npm update
+pnpm update
 
 # Frontend
 cd frontend
-npm update
+pnpm update
 ```
 
 ### Migrations de Base
@@ -289,7 +289,7 @@ npx prisma migrate dev
 ### Logs de Debug
 ```bash
 # Activer les logs détaillés
-DEBUG=* npm run dev
+DEBUG=* pnpm run dev
 ```
 
 ### Vérification de l'Installation

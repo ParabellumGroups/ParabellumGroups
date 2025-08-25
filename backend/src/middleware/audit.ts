@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { getPrismaClient } from '../config/database';
 import { AuthenticatedRequest, AuditLogData } from '../types';
+import { auditLogger } from '../config/logger';
 
-const prisma = new PrismaClient();
+const prisma = getPrismaClient();
 
 export const auditLog = (action: string, resource: string) => {
   return async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {

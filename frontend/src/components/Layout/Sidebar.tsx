@@ -13,7 +13,9 @@ import {
   UserCheck,
   DollarSign,
   BarChart3,
-  Calendar
+  Calendar,
+  Target,
+  Wrench
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { NavigationItem } from '../../types';
@@ -61,10 +63,106 @@ const navigationItems: NavigationItem[] = [
     permission: 'expenses.read',
   },
   {
+    name: 'Commercial',
+    href: '/commercial',
+    icon: Target,
+    permission: 'prospects.read',
+    children: [
+      {
+        name: 'Workflow Prospection',
+        href: '/commercial/prospection',
+        icon: Target,
+        permission: 'prospects.read',
+      },
+      {
+        name: 'Pipeline CRM',
+        href: '/commercial/pipeline',
+        icon: TrendingUp,
+        permission: 'quotes.read',
+      },
+    ],
+  },
+  {
     name: 'Rapports',
     href: '/reports',
     icon: BarChart3,
     permission: 'reports.financial',
+  },
+  {
+    name: 'Ressources Humaines',
+    href: '/hr',
+    icon: UserCheck,
+    permission: 'employees.read',
+    children: [
+      {
+        name: 'Employés',
+        href: '/hr/employees',
+        icon: Users,
+        permission: 'employees.read',
+      },
+      {
+        name: 'Salaires',
+        href: '/hr/salaries',
+        icon: DollarSign,
+        permission: 'salaries.read',
+      },
+      {
+        name: 'Contrats',
+        href: '/hr/contracts',
+        icon: FileText,
+        permission: 'contracts.read',
+      },
+      {
+        name: 'Congés',
+        href: '/hr/leaves',
+        icon: Calendar,
+        permission: 'leaves.read',
+      },
+      {
+        name: 'Prêts',
+        href: '/hr/loans',
+        icon: DollarSign,
+        permission: 'loans.read',
+      },
+    ],
+  },
+  {
+    name: 'Services Techniques',
+    href: '/services',
+    icon: Wrench,
+    permission: 'techniciens.read',
+    children: [
+      {
+        name: 'Spécialités',
+        href: '/services/specialites',
+        icon: Wrench,
+        permission: 'specialites.read',
+      },
+      {
+        name: 'Techniciens',
+        href: '/services/techniciens',
+        icon: Users,
+        permission: 'techniciens.read',
+      },
+      {
+        name: 'Missions',
+        href: '/services/missions',
+        icon: FileText,
+        permission: 'missions.read',
+      },
+      {
+        name: 'Interventions',
+        href: '/services/interventions',
+        icon: Calendar,
+        permission: 'interventions.read',
+      },
+      {
+        name: 'Matériel',
+        href: '/services/materiel',
+        icon: Package,
+        permission: 'materiels.read',
+      },
+    ],
   },
   {
     name: 'Administration',
@@ -122,11 +220,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
   const visibleItems = filterNavigationItems(navigationItems);
 
   return (
-    <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 transform transition-transform duration-300 ease-in-out ${
+    <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 dark:bg-gray-950 transform transition-transform duration-300 ease-in-out ${
       isOpen ? 'translate-x-0' : '-translate-x-full'
     } lg:translate-x-0 lg:static lg:inset-0`}>
-      <div className="flex items-center justify-center h-16 bg-gray-800">
-        <h1 className="text-white text-xl font-bold">Parabellum</h1>
+      <div className="flex items-center justify-center h-16 bg-gray-800 dark:bg-gray-900">
+        <div className="flex items-center space-x-3">
+          <img 
+            src="/parrabellum.jpg" 
+            alt="Parabellum Groups" 
+            className="w-8 h-8 rounded-full"
+          />
+          <h1 className="text-white text-xl font-bold">Parabellum</h1>
+        </div>
       </div>
       
       <nav className="mt-8">
@@ -138,8 +243,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
                 className={({ isActive }) =>
                   `flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                     isActive
-                      ? 'bg-gray-800 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                      ? 'bg-gray-800 dark:bg-gray-700 text-white'
+                      : 'text-gray-300 dark:text-gray-400 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-white'
                   }`
                 }
               >
@@ -156,8 +261,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
                       className={({ isActive }) =>
                         `flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                           isActive
-                            ? 'bg-gray-800 text-white'
-                            : 'text-gray-400 hover:bg-gray-700 hover:text-white'
+                            ? 'bg-gray-800 dark:bg-gray-700 text-white'
+                            : 'text-gray-400 dark:text-gray-500 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-white'
                         }`
                       }
                     >

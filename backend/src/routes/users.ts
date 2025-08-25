@@ -8,6 +8,8 @@ import {
   updatePassword,
   getRoles,
   getServices,
+  getUserPermissions,
+  updateUserPermissions,
   validateUser,
   validateUserCreation,
   validatePasswordUpdate
@@ -61,6 +63,19 @@ router.patch('/:id/password',
   validatePasswordUpdate,
   auditLog('UPDATE_PASSWORD', 'USER'),
   updatePassword
+);
+
+// Routes pour la gestion des permissions
+router.get('/:id/permissions', 
+  requirePermission('users.manage_permissions'),
+  auditLog('READ', 'USER_PERMISSIONS'),
+  getUserPermissions
+);
+
+router.put('/:id/permissions', 
+  requirePermission('users.manage_permissions'),
+  auditLog('UPDATE', 'USER_PERMISSIONS'),
+  updateUserPermissions
 );
 
 export default router;

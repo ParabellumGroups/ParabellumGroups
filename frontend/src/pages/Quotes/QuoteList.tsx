@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Plus, Search, Filter, Edit, Eye, CheckCircle, XCircle, Clock } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { createCrudService } from '../../services/api';
+import { CreateQuoteModal } from '../../components/Modals/CreateQuoteModal';
 
 const quoteService = createCrudService('quotes');
 
@@ -90,6 +91,12 @@ export const QuoteList: React.FC = () => {
           </select>
         </div>
       </div>
+
+      {/* Modales */}
+      <CreateQuoteModal 
+        isOpen={showCreateModal} 
+        onClose={() => setShowCreateModal(false)} 
+      />
 
       {/* Liste des devis */}
       <div className="bg-white shadow rounded-lg overflow-hidden">

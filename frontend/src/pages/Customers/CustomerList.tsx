@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Plus, Search, Filter, Edit, Trash2, Eye } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { createCrudService } from '../../services/api';
+import { CreateCustomerModal } from '../../components/Modals/CreateCustomerModal';
 
 const customerService = createCrudService('customers');
 
@@ -74,6 +75,12 @@ export const CustomerList: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* Modales */}
+      <CreateCustomerModal 
+        isOpen={showCreateModal} 
+        onClose={() => setShowCreateModal(false)} 
+      />
 
       {/* Liste des clients */}
       <div className="bg-white shadow rounded-lg overflow-hidden">

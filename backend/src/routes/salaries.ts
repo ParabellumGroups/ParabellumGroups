@@ -6,7 +6,8 @@ import {
   updateSalary,
   deleteSalary,
   getSalaryReport,
-  validateSalary
+  validateSalary,
+  paySalary
 } from '../controllers/salaryController';
 import { authenticateToken, requirePermission } from '../middleware/auth';
 import { auditLog } from '../middleware/audit';
@@ -54,6 +55,13 @@ router.delete('/:id',
   requirePermission('salaries.delete'),
   auditLog('DELETE', 'SALARY'),
   deleteSalary
+);
+
+// Route pour marquer un salaire comme payé
+router.post('/:id/pay', 
+  requirePermission('salaries.update'),
+  auditLog('PAY', 'SALARY'),
+  paySalary
 );
 
 export default router;

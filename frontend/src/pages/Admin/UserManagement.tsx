@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search, Edit, Trash2, Eye, Shield, Key } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { createCrudService } from '../../services/api';
+import { CreateUserModal } from '../../components/Modals/CreateUserModal';
 
 const userService = createCrudService('users');
 
@@ -22,6 +23,7 @@ export const UserManagement: React.FC = () => {
   const [roleFilter, setRoleFilter] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [showPermissionsModal, setShowPermissionsModal] = useState(false);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['users', page, search, roleFilter],
@@ -110,51 +112,51 @@ export const UserManagement: React.FC = () => {
       </div>
 
       {/* Liste des utilisateurs */}
-      <div className="bg-white shadow rounded-lg overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider bg-gray-50 dark:bg-gray-700">
                 Utilisateur
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider bg-gray-50 dark:bg-gray-700">
                 Rôle
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider bg-gray-50 dark:bg-gray-700">
                 Service
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider bg-gray-50 dark:bg-gray-700">
                 Dernière connexion
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider bg-gray-50 dark:bg-gray-700">
                 Statut
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider bg-gray-50 dark:bg-gray-700">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             {users.map((user: any) => (
-              <tr key={user.id} className="hover:bg-gray-50">
+              <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div className="flex-shrink-0 h-10 w-10">
                       {user.avatarUrl ? (
                         <img className="h-10 w-10 rounded-full" src={user.avatarUrl} alt="" />
                       ) : (
-                        <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
-                          <span className="text-sm font-medium text-gray-700">
+                        <div className="h-10 w-10 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
+                          <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
                             {user.firstName[0]}{user.lastName[0]}
                           </span>
                         </div>
                       )}
                     </div>
                     <div className="ml-4">
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm font-medium text-gray-900 dark:text-white">
                         {user.firstName} {user.lastName}
                       </div>
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
                         {user.email}
                       </div>
                     </div>
@@ -166,10 +168,10 @@ export const UserManagement: React.FC = () => {
                     {roleLabels[user.role as keyof typeof roleLabels]}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                   {user.service?.name || 'N/A'}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                   {user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Jamais'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -199,6 +201,18 @@ export const UserManagement: React.FC = () => {
                     {hasPermission('users.update') && (
                       <button className="text-yellow-600 hover:text-yellow-900">
                         <Key className="h-4 w-4" />
+                      </button>
+                    )}
+                    {hasPermission('users.manage_permissions') && (
+                      <button 
+                        onClick={() => {
+                          setSelectedUser(user);
+                          setShowPermissionsModal(true);
+                        }}
+                        className="text-purple-600 hover:text-purple-900"
+                        title="Gérer les permissions"
+                      >
+                        <Shield className="h-4 w-4" />
                       </button>
                     )}
                     {hasPermission('users.delete') && (
@@ -270,6 +284,12 @@ export const UserManagement: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Modales */}
+      <CreateUserModal 
+        isOpen={showCreateModal} 
+        onClose={() => setShowCreateModal(false)} 
+      />
     </div>
   );
 };

@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { PrismaClient } from '@prisma/client';
+import { getPrismaClient } from '../config/database';
 import { ROLE_PERMISSIONS } from '../database/permissions';
 import { AuthResponse, LoginRequest } from '../types';
+import { logger, auditLogger } from '../config/logger';
+import { config } from '../config';
 
-const prisma = new PrismaClient();
+const prisma = getPrismaClient();
 
 export const login = async (req: Request, res: Response) => {
   try {
@@ -42,7 +44,8 @@ export const login = async (req: Request, res: Response) => {
     }
 
     // Obtenir les permissions basées sur le rôle
-    const permissions = ROLE_PERMISSIONS[user.role as keyof typeof ROLE_PERMISSIONS] || [];
+    const customPermissions = user.preferences ? JSON.parse(user.preferences) : null;
+    const permissions = customPermissions?.permissions || ROLE_PERMISSIONS[user.role as keyof typeof ROLE_PERMISSIONS] || [];
 
     // Générer les tokens
     const tokenPayload = {
@@ -82,7 +85,7 @@ export const login = async (req: Request, res: Response) => {
       },
       token,
       refreshToken,
-      permissions: permissions.map(perm => ({
+      permissions: permissions.map((perm: string) => ({
         id: 0,
         name: perm,
         resource: perm.split('.')[0],
@@ -129,7 +132,8 @@ export const refreshToken = async (req: Request, res: Response) => {
       });
     }
 
-    const permissions = ROLE_PERMISSIONS[user.role as keyof typeof ROLE_PERMISSIONS] || [];
+    const customPermissions = user.preferences ? JSON.parse(user.preferences) : null;
+    const permissions = customPermissions?.permissions || ROLE_PERMISSIONS[user.role as keyof typeof ROLE_PERMISSIONS] || [];
 
     const newToken = jwt.sign(
       {
@@ -178,7 +182,8 @@ export const getProfile = async (req: any, res: Response) => {
       });
     }
 
-    const permissions = ROLE_PERMISSIONS[user.role as keyof typeof ROLE_PERMISSIONS] || [];
+    const customPermissions = user.preferences ? JSON.parse(user.preferences) : null;
+    const permissions = customPermissions?.permissions || ROLE_PERMISSIONS[user.role as keyof typeof ROLE_PERMISSIONS] || [];
 
     res.json({
       success: true,
@@ -195,7 +200,7 @@ export const getProfile = async (req: any, res: Response) => {
           avatarUrl: user.avatarUrl,
           service: user.service
         },
-        permissions: permissions.map(perm => ({
+        permissions: permissions.map((perm: string) => ({
           id: 0,
           name: perm,
           resource: perm.split('.')[0],

@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import { AuthenticatedRequest } from '../types';
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
-import { ROLE_PERMISSIONS } from '../database/permissions';
+import { ROLE_PERMISSIONS, PERMISSIONS_LIST } from '../database/permissions';
 
 const prisma = new PrismaClient();
 
@@ -42,19 +42,6 @@ export const getUsers = async (req: AuthenticatedRequest, res: Response) => {
             select: { id: true, name: true }
           }
         },
-        select: {
-          id: true,
-          email: true,
-          firstName: true,
-          lastName: true,
-          role: true,
-          serviceId: true,
-          isActive: true,
-          lastLogin: true,
-          avatarUrl: true,
-          createdAt: true,
-          service: true
-        },
         skip: offset,
         take: Number(limit),
         orderBy: { createdAt: 'desc' }
@@ -62,10 +49,16 @@ export const getUsers = async (req: AuthenticatedRequest, res: Response) => {
       prisma.user.count({ where: whereClause })
     ]);
 
+    // Exclure le mot de passe des résultats
+    const safeUsers = users.map(user => {
+      const { passwordHash, ...safeUser } = user;
+      return safeUser;
+    });
+
     res.json({
       success: true,
       data: {
-        users,
+        users: safeUsers,
         pagination: {
           page: Number(page),
           limit: Number(limit),
@@ -91,21 +84,6 @@ export const getUserById = async (req: AuthenticatedRequest, res: Response) => {
       where: { id: Number(id) },
       include: {
         service: true
-      },
-      select: {
-        id: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        role: true,
-        serviceId: true,
-        isActive: true,
-        lastLogin: true,
-        avatarUrl: true,
-        preferences: true,
-        createdAt: true,
-        updatedAt: true,
-        service: true
       }
     });
 
@@ -116,14 +94,18 @@ export const getUserById = async (req: AuthenticatedRequest, res: Response) => {
       });
     }
 
+    // Exclure le mot de passe
+    const { passwordHash, ...safeUser } = user;
+
     // Ajouter les permissions basées sur le rôle
-    const permissions = ROLE_PERMISSIONS[user.role as keyof typeof ROLE_PERMISSIONS] || [];
+    const customPermissions = user.preferences ? JSON.parse(user.preferences) : null;
+    const permissions = customPermissions?.permissions || ROLE_PERMISSIONS[user.role as keyof typeof ROLE_PERMISSIONS] || [];
 
     res.json({
       success: true,
       data: {
-        ...user,
-        permissions: permissions.map(perm => ({
+        ...safeUser,
+        permissions: permissions.map((perm: string) => ({
           id: 0,
           name: perm,
           resource: perm.split('.')[0],
@@ -202,23 +184,15 @@ export const createUser = async (req: AuthenticatedRequest, res: Response) => {
       },
       include: {
         service: true
-      },
-      select: {
-        id: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        role: true,
-        serviceId: true,
-        isActive: true,
-        createdAt: true,
-        service: true
       }
     });
 
+    // Exclure le mot de passe de la réponse
+    const { passwordHash: _, ...safeUser } = user;
+
     res.status(201).json({
       success: true,
-      data: user,
+      data: safeUser,
       message: 'Utilisateur créé avec succès'
     });
   } catch (error) {
@@ -303,23 +277,15 @@ export const updateUser = async (req: AuthenticatedRequest, res: Response) => {
       },
       include: {
         service: true
-      },
-      select: {
-        id: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        role: true,
-        serviceId: true,
-        isActive: true,
-        updatedAt: true,
-        service: true
       }
     });
 
+    // Exclure le mot de passe
+    const { passwordHash, ...safeUser } = user;
+
     res.json({
       success: true,
-      data: user,
+      data: safeUser,
       message: 'Utilisateur mis à jour avec succès'
     });
   } catch (error) {
@@ -493,6 +459,101 @@ export const getServices = async (req: AuthenticatedRequest, res: Response) => {
     });
   } catch (error) {
     console.error('Erreur lors de la récupération des services:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Erreur interne du serveur'
+    });
+  }
+};
+
+export const getUserPermissions = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const user = await prisma.user.findUnique({
+      where: { id: Number(id) }
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'Utilisateur non trouvé'
+      });
+    }
+
+    // Récupérer les permissions personnalisées ou celles du rôle par défaut
+    const customPermissions = user.preferences ? JSON.parse(user.preferences) : null;
+    const defaultPermissions = ROLE_PERMISSIONS[user.role as keyof typeof ROLE_PERMISSIONS] || [];
+    
+    res.json({
+      success: true,
+      data: customPermissions?.permissions || defaultPermissions
+    });
+  } catch (error) {
+    console.error('Erreur lors de la récupération des permissions:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Erreur interne du serveur'
+    });
+  }
+};
+
+export const updateUserPermissions = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { permissions } = req.body;
+
+    if (!Array.isArray(permissions)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Les permissions doivent être un tableau'
+      });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: Number(id) }
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'Utilisateur non trouvé'
+      });
+    }
+
+    // Valider que toutes les permissions existent
+    const validPermissions = Object.keys(PERMISSIONS_LIST);
+    const invalidPermissions = permissions.filter((perm: string) => !validPermissions.includes(perm));
+    
+    if (invalidPermissions.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Permissions invalides',
+        errors: invalidPermissions
+      });
+    }
+
+    // Stocker les permissions dans le champ preferences
+    const preferences = user.preferences ? JSON.parse(user.preferences) : {};
+    preferences.permissions = permissions;
+
+    const updatedUser = await prisma.user.update({
+      where: { id: Number(id) },
+      data: {
+        preferences: JSON.stringify(preferences)
+      }
+    });
+
+    // Exclure le mot de passe
+    const { passwordHash, ...safeUser } = updatedUser;
+
+    res.json({
+      success: true,
+      data: safeUser,
+      message: 'Permissions mises à jour avec succès'
+    });
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour des permissions:', error);
     res.status(500).json({
       success: false,
       message: 'Erreur interne du serveur'

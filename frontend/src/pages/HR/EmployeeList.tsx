@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search, Edit, Trash2, Eye, User, Calendar, DollarSign } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { createCrudService } from '../../services/api';
+import { CreateEmployeeModal } from '../../components/Modals/CreateEmployeeModal';
 
 const employeeService = createCrudService('employees');
 
@@ -99,6 +100,12 @@ export const EmployeeList: React.FC = () => {
           </select>
         </div>
       </div>
+
+      {/* Modales */}
+      <CreateEmployeeModal 
+        isOpen={showCreateModal} 
+        onClose={() => setShowCreateModal(false)} 
+      />
 
       {/* Liste des employés */}
       <div className="bg-white shadow rounded-lg overflow-hidden">

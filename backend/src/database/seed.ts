@@ -358,6 +358,97 @@ async function main() {
   console.log('🏢 SIFCA Group (Grande Entreprise)');
   console.log('💻 Progitek Solutions (PME Technologie)');
   console.log('👤 M. Konan Kouadio (Particulier)');
+
+  // Créer les spécialités techniques
+  console.log('🔧 Création des spécialités techniques...');
+  const specialites = await prisma.specialite.createMany({
+    data: [
+      {
+        libelle: 'Électricité',
+        description: 'Installation et maintenance électrique'
+      },
+      {
+        libelle: 'Plomberie',
+        description: 'Installation et réparation de plomberie'
+      },
+      {
+        libelle: 'Climatisation',
+        description: 'Installation et maintenance de systèmes de climatisation'
+      },
+      {
+        libelle: 'Informatique',
+        description: 'Support technique informatique et réseaux'
+      }
+    ]
+  });
+
+  // Créer quelques techniciens
+  console.log('👷 Création des techniciens...');
+  const techniciens = await prisma.technicien.createMany({
+    data: [
+      {
+        nom: 'Kouassi',
+        prenom: 'Jean',
+        contact: '+225 01 02 03 04 05',
+        specialiteId: 1 // Électricité
+      },
+      {
+        nom: 'Diabaté',
+        prenom: 'Marie',
+        contact: '+225 06 07 08 09 10',
+        specialiteId: 2 // Plomberie
+      },
+      {
+        nom: 'Konan',
+        prenom: 'Paul',
+        contact: '+225 11 12 13 14 15',
+        specialiteId: 3 // Climatisation
+      }
+    ]
+  });
+
+  // Créer du matériel de base
+  console.log('📦 Création du matériel...');
+  const materiels = await prisma.materiel.createMany({
+    data: [
+      {
+        reference: 'MAT-001',
+        designation: 'Perceuse électrique',
+        description: 'Perceuse électrique 18V avec batterie',
+        quantiteTotale: 5,
+        quantiteDisponible: 3,
+        seuilAlerte: 2,
+        emplacement: 'Magasin A',
+        categorie: 'Outillage',
+        prixUnitaire: 85000
+      },
+      {
+        reference: 'MAT-002',
+        designation: 'Multimètre digital',
+        description: 'Multimètre digital professionnel',
+        quantiteTotale: 10,
+        quantiteDisponible: 8,
+        seuilAlerte: 3,
+        emplacement: 'Magasin A',
+        categorie: 'Électrique',
+        prixUnitaire: 45000
+      },
+      {
+        reference: 'MAT-003',
+        designation: 'Clé à molette',
+        description: 'Clé à molette réglable 250mm',
+        quantiteTotale: 15,
+        quantiteDisponible: 2,
+        seuilAlerte: 5,
+        emplacement: 'Atelier B',
+        categorie: 'Plomberie',
+        prixUnitaire: 12000
+      }
+    ]
+  });
+
+  console.log('🔧 Spécialités et techniciens créés');
+  console.log('📦 Matériel de base ajouté');
 }
 
 main()
