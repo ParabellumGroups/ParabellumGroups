@@ -193,7 +193,7 @@ export const formatters = {
     // Supprimer tous les caractères non numériques
     const cleaned = phone.replace(/\D/g, '');
     
-    // Format ivoirien : +225 XX XX XX XX XX
+    // Format ivoirien : +225 07 07 07 07 07
     if (cleaned.startsWith('225') && cleaned.length === 13) {
       return `+225 ${cleaned.slice(3, 5)} ${cleaned.slice(5, 7)} ${cleaned.slice(7, 9)} ${cleaned.slice(9, 11)} ${cleaned.slice(11)}`;
     }

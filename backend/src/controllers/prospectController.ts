@@ -464,7 +464,7 @@ async function convertProspectToCustomer(prospect: any, userId: number) {
         website: prospect.website,
         category: prospect.industry,
         notes: `Converti depuis prospect. ${prospect.notes || ''}`,
-        serviceId: req.user!.serviceId,
+        serviceId: prospect.assignedUser?.serviceId || null,
         createdBy: userId,
         addresses: prospect.address ? {
           create: [{

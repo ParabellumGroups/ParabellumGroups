@@ -5,6 +5,14 @@ interface ContractPrintProps {
   onClose: () => void;
 }
 
+// Ajoutez cette constante avant le composant
+const contractTypeLabels = {
+  CDI: 'Contrat à Durée Indéterminée',
+  CDD: 'Contrat à Durée Déterminée',
+  STAGE: 'Convention de Stage',
+  FREELANCE: 'Contrat de Freelance'
+};
+
 export const ContractPrint: React.FC<ContractPrintProps> = ({ contract, onClose }) => {
   React.useEffect(() => {
     const handlePrint = () => {
@@ -47,7 +55,7 @@ export const ContractPrint: React.FC<ContractPrintProps> = ({ contract, onClose 
               <p className="text-gray-600">Solution technique innovante</p>
               <div className="text-sm text-gray-500 space-y-1">
                 <p>Abidjan, Côte d'Ivoire</p>
-                <p>+225 XX XX XX XX XX</p>
+                <p>+225 07 07 07 07 07</p>
                 <p>contact@parabellum.com</p>
               </div>
             </div>
@@ -253,7 +261,7 @@ export const ContractPrint: React.FC<ContractPrintProps> = ({ contract, onClose 
       </div>
 
       {/* Styles d'impression */}
-      <style jsx>{`
+      <style>{`
         @media print {
           body { 
             margin: 0; 

@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search, Filter, Edit, Eye, Send, Printer, Download, CheckCircle, XCircle, Clock } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { createCrudService } from '../../services/api';
-import { CreateInvoiceModal } from '../../components/Modals/CreateInvoiceModal';
+import { CreateInvoiceModal } from '../../components/Modals/Create/CreateInvoiceModal';
 
 const invoiceService = createCrudService('invoices');
 

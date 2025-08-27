@@ -38,7 +38,7 @@ export const config = {
   FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:5173',
   ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS?.split(',') || [
     'http://localhost:5173',
-    'http://localhost:3000'
+    'http://localhost:3001'
   ],
   
   // Redis
@@ -89,7 +89,7 @@ export const config = {
   // Entreprise
   COMPANY_NAME: process.env.COMPANY_NAME || 'Parabellum Groups',
   COMPANY_ADDRESS: process.env.COMPANY_ADDRESS || 'Abidjan, Côte d\'Ivoire',
-  COMPANY_PHONE: process.env.COMPANY_PHONE || '+225 XX XX XX XX XX',
+  COMPANY_PHONE: process.env.COMPANY_PHONE || '+225 07 07 07 07 07',
   COMPANY_EMAIL: process.env.COMPANY_EMAIL || 'contact@parabellum.com',
   COMPANY_WEBSITE: process.env.COMPANY_WEBSITE || 'https://parabellum.com',
   

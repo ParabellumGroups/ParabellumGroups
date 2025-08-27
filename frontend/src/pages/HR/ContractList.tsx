@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search, Edit, Trash2, Eye, FileText, Calendar, DollarSign, Printer, User, Clock } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { createCrudService } from '../../services/api';
-import { CreateContractModal } from '../../components/Modals/CreateContractModal';
+import { CreateContractModal } from '../../components/Modals/Create/CreateContractModal';
 import { ContractPrint } from '../../components/PrintComponents/ContractPrint';
 
 const contractService = createCrudService('contracts');

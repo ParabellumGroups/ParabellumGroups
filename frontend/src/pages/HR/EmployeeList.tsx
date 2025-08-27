@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search, Edit, Trash2, Eye, User, Calendar, DollarSign } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { createCrudService } from '../../services/api';
-import { CreateEmployeeModal } from '../../components/Modals/CreateEmployeeModal';
+import { CreateEmployeeModal } from '../../components/Modals/Create/CreateEmployeeModal';
 
 const employeeService = createCrudService('employees');
 

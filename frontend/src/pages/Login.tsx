@@ -63,8 +63,7 @@ export const Login: React.FC = () => {
                   className="w-full h-full object-contain rounded-full"
                 />
               </div>
-              <h1 className="text-2xl font-bold text-gray-900 mb-1">ProgiTeck</h1>
-              <p className="text-sm text-gray-500">Solution technique innovante</p>
+              <h1 className="text-2xl font-bold text-gray-900 mb-1">Parabellum Groups</h1>
             </div>
 
             {/* Titre de connexion */}
@@ -72,9 +71,6 @@ export const Login: React.FC = () => {
               <h2 className="text-xl font-semibold text-gray-800 mb-2">
                 Connexion à votre espace
               </h2>
-              <p className="text-sm text-gray-600">
-                Entrez vos identifiants pour au tableau de bord
-              </p>
             </div>
 
             {/* Formulaire */}
@@ -156,31 +152,6 @@ export const Login: React.FC = () => {
                 )}
               </button>
             </form>
-          </div>
-
-          {/* Comptes de démonstration */}
-          <div className="bg-gray-50 px-8 py-6 border-t border-gray-100">
-            <div className="text-center">
-              <p className="text-sm font-medium text-gray-700 mb-3">Comptes de démonstration :</p>
-              <div className="grid grid-cols-1 gap-2 text-xs text-gray-600">
-                <div className="flex justify-between">
-                  <span className="font-medium">DG:</span>
-                  <span>dg@parabellum.com / password123</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">Admin:</span>
-                  <span>admin@parabellum.com / password123</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">Commercial:</span>
-                  <span>commercial@parabellum.com / password123</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">Comptable:</span>
-                  <span>comptable@parabellum.com / password123</span>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

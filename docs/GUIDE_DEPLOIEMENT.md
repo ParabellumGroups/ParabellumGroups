@@ -118,7 +118,7 @@ RATE_LIMIT_MAX_REQUESTS=100
 # Entreprise
 COMPANY_NAME="Parabellum Groups"
 COMPANY_ADDRESS="Abidjan, Côte d'Ivoire"
-COMPANY_PHONE="+225 XX XX XX XX XX"
+COMPANY_PHONE="+225 07 07 07 07 07"
 COMPANY_EMAIL="contact@parabellum.com"
 ```
 
@@ -692,7 +692,7 @@ sudo systemctl restart nginx
 ### Contacts Techniques
 - **Email** : dev@parabellum.com
 - **Documentation** : https://docs.parabellum.com
-- **Support** : +225 XX XX XX XX XX
+- **Support** : +225 07 07 07 07 07
 
 ### Ressources
 - **Logs Application** : `/var/www/parabellum-groups/Back-end/logs/`

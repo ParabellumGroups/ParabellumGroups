@@ -3,8 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search, Edit, Trash2, Eye, User, Wrench, Phone } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { createCrudService } from '../../services/api';
-import { CreateSpecialiteModal } from '../components/Modals/CreateSpecialiteModal';
-import { CreateTechnicienModal } from '../../components/Modals/CreateTechnicienModal';
+import { CreateTechnicienModal } from '../../components/Modals/Create/CreateTechnicienModal';
 
 const technicienService = createCrudService('techniciens');
 
@@ -171,11 +170,10 @@ export const TechnicienList: React.FC = () => {
                   )}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                    technicien.isActive 
-                      ? 'bg-green-100 text-green-800' 
+                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${technicien.isActive
+                      ? 'bg-green-100 text-green-800'
                       : 'bg-red-100 text-red-800'
-                  }`}>
+                    }`}>
                     {technicien.isActive ? 'Actif' : 'Inactif'}
                   </span>
                 </td>
@@ -192,7 +190,7 @@ export const TechnicienList: React.FC = () => {
                       </button>
                     )}
                     {hasPermission('techniciens.delete') && (
-                      <button 
+                      <button
                         onClick={() => handleDeleteTechnicien(technicien)}
                         className="text-red-600 hover:text-red-900"
                         title="Supprimer"
@@ -246,11 +244,10 @@ export const TechnicienList: React.FC = () => {
                     <button
                       key={pageNum}
                       onClick={() => setPage(pageNum)}
-                      className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
-                        pageNum === page
+                      className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${pageNum === page
                           ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
                           : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
-                      }`}
+                        }`}
                     >
                       {pageNum}
                     </button>
@@ -263,9 +260,9 @@ export const TechnicienList: React.FC = () => {
       </div>
 
       {/* Modales */}
-      <CreateSpecialiteModal 
-        isOpen={showCreateModal} 
-        onClose={() => setShowCreateModal(false)} 
+      <CreateTechnicienModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
       />
     </div>
   );

@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search, Eye, Edit, Trash2, DollarSign, Printer, Download, CheckCircle, Clock, User, Calendar } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { createCrudService } from '../../services/api';
-import { CreateSalaryModal } from '../../components/Modals/CreateSalaryModal';
+import { CreateSalaryModal } from '../../components/Modals/Create/CreateSalaryModal';
 import { PaySalaryModal } from '../../components/Modals/PaySalaryModal';
 import { PayslipPrint } from '../../components/PrintComponents/PayslipPrint';
 

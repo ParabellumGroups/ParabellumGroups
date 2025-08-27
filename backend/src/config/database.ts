@@ -6,7 +6,7 @@ let prisma: PrismaClient;
 
 // Configuration Prisma avec options optimisées
 const createPrismaClient = (): PrismaClient => {
-  return new PrismaClient({
+  const prisma = new PrismaClient({
     log: [
       { emit: 'event', level: 'query' },
       { emit: 'event', level: 'error' },
@@ -15,39 +15,32 @@ const createPrismaClient = (): PrismaClient => {
     ],
     errorFormat: 'pretty',
   });
-};
 
-// Initialiser Prisma
-export const initializePrisma = (): PrismaClient => {
-  if (!prisma) {
-    prisma = createPrismaClient();
-
-    // Logging des requêtes en développement
-    if (process.env.NODE_ENV === 'development') {
-      prisma.$on('query', (e) => {
-        logger.debug('Prisma Query:', {
-          query: e.query,
-          params: e.params,
-          duration: `${e.duration}ms`,
-        });
+  // Logging des requêtes en développement
+  if (process.env.NODE_ENV === 'development') {
+    prisma.$on('query' as any, (e: any) => {
+      logger.debug('Prisma Query:', {
+        query: e.query,
+        params: e.params,
+        duration: `${e.duration}ms`,
       });
-    }
-
-    // Logging des erreurs
-    prisma.$on('error', (e) => {
-      logger.error('Prisma Error:', e);
-    });
-
-    // Logging des infos
-    prisma.$on('info', (e) => {
-      logger.info('Prisma Info:', e);
-    });
-
-    // Logging des warnings
-    prisma.$on('warn', (e) => {
-      logger.warn('Prisma Warning:', e);
     });
   }
+
+  // Logging des erreurs
+  prisma.$on('error' as any, (e: any) => {
+    logger.error('Prisma Error:', e);
+  });
+
+  // Logging des infos
+  prisma.$on('info' as any, (e: any) => {
+    logger.info('Prisma Info:', e);
+  });
+
+  // Logging des warnings
+  prisma.$on('warn' as any, (e: any) => {
+    logger.warn('Prisma Warning:', e);
+  });
 
   return prisma;
 };
@@ -55,7 +48,7 @@ export const initializePrisma = (): PrismaClient => {
 // Obtenir l'instance Prisma
 export const getPrismaClient = (): PrismaClient => {
   if (!prisma) {
-    prisma = initializePrisma();
+    prisma = createPrismaClient();
   }
   return prisma;
 };
@@ -65,10 +58,10 @@ export const testDatabaseConnection = async (): Promise<boolean> => {
   try {
     const client = getPrismaClient();
     await client.$connect();
-    
+
     // Test simple de requête
     await client.$queryRaw`SELECT 1`;
-    
+
     logger.info('✅ Connexion à la base de données établie avec succès');
     return true;
   } catch (error) {
@@ -103,17 +96,17 @@ export const checkDatabaseHealth = async (): Promise<{
   try {
     const client = getPrismaClient();
     const start = Date.now();
-    
+
     // Test de connectivité
     await client.$queryRaw`SELECT 1`;
-    
+
     // Test de performance
     const duration = Date.now() - start;
-    
+
     // Statistiques de base
     const userCount = await client.user.count();
     const customerCount = await client.customer.count();
-    
+
     return {
       status: 'healthy',
       details: {

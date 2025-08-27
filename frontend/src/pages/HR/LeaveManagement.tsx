@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search, Calendar, CheckCircle, XCircle, Clock, User } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { createCrudService } from '../../services/api';
-import { CreateLeaveModal } from '../../components/Modals/CreateLeaveModal';
+import { CreateLeaveModal } from '../../components/Modals/Create/CreateLeaveModal';
 
 const leaveService = createCrudService('leaves');
 
@@ -37,7 +37,7 @@ export const LeaveManagement: React.FC = () => {
 
   const approveMutation = useMutation({
     mutationFn: ({ id, comments }: { id: number; comments?: string }) => 
-      fetch(`/api/v1/leaves/${id}/approve`, {
+      fetch(`/api/v1/leaves/${id}/approve`, { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

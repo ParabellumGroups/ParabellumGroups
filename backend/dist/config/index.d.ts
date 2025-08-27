@@ -1,0 +1,88 @@
+export declare const config: {
+    NODE_ENV: string;
+    PORT: number;
+    DATABASE_URL: string;
+    JWT_SECRET: string;
+    JWT_REFRESH_SECRET: string;
+    JWT_EXPIRES_IN: string;
+    JWT_REFRESH_EXPIRES_IN: string;
+    FRONTEND_URL: string;
+    ALLOWED_ORIGINS: string[];
+    REDIS_HOST: string;
+    REDIS_PORT: number;
+    REDIS_PASSWORD: string | undefined;
+    REDIS_DB: number;
+    SMTP_HOST: string | undefined;
+    SMTP_PORT: number;
+    SMTP_USER: string | undefined;
+    SMTP_PASS: string | undefined;
+    SMTP_FROM: string;
+    UPLOAD_DIR: string;
+    MAX_FILE_SIZE: number;
+    ALLOWED_FILE_TYPES: string[];
+    RATE_LIMIT_WINDOW_MS: number;
+    RATE_LIMIT_MAX_REQUESTS: number;
+    LOG_LEVEL: string;
+    API_VERSION: string;
+    API_BASE_URL: string;
+    BCRYPT_ROUNDS: number;
+    SESSION_SECRET: string;
+    ENABLE_SWAGGER: boolean;
+    ENABLE_CACHE: boolean;
+    ENABLE_RATE_LIMITING: boolean;
+    COMPANY_NAME: string;
+    COMPANY_ADDRESS: string;
+    COMPANY_PHONE: string;
+    COMPANY_EMAIL: string;
+    COMPANY_WEBSITE: string;
+    INVOICE_PREFIX: string;
+    QUOTE_PREFIX: string;
+    PAYMENT_PREFIX: string;
+    DEFAULT_VAT_RATE: number;
+    DEFAULT_PAYMENT_TERMS: number;
+    validate: () => void;
+};
+export declare const isDevelopment: () => boolean;
+export declare const isProduction: () => boolean;
+export declare const isTest: () => boolean;
+export declare const TIMEOUTS: {
+    DATABASE_QUERY: number;
+    HTTP_REQUEST: number;
+    FILE_UPLOAD: number;
+    EMAIL_SEND: number;
+    CACHE_OPERATION: number;
+};
+export declare const LIMITS: {
+    MAX_ITEMS_PER_QUOTE: number;
+    MAX_ITEMS_PER_INVOICE: number;
+    MAX_SEARCH_RESULTS: number;
+    MAX_EXPORT_RECORDS: number;
+    MAX_UPLOAD_SIZE: number;
+    MAX_PAGINATION_LIMIT: number;
+};
+export declare const ERROR_MESSAGES: {
+    UNAUTHORIZED: string;
+    FORBIDDEN: string;
+    NOT_FOUND: string;
+    VALIDATION_ERROR: string;
+    INTERNAL_ERROR: string;
+    DATABASE_ERROR: string;
+    CACHE_ERROR: string;
+    EMAIL_ERROR: string;
+    FILE_UPLOAD_ERROR: string;
+};
+export declare const DATE_FORMATS: {
+    ISO: string;
+    DATE_ONLY: string;
+    DATETIME: string;
+    FRENCH_DATE: string;
+    FRENCH_DATETIME: string;
+};
+export declare const CURRENCY: {
+    CODE: string;
+    SYMBOL: string;
+    DECIMAL_PLACES: number;
+    LOCALE: string;
+};
+export default config;
+//# sourceMappingURL=index.d.ts.map

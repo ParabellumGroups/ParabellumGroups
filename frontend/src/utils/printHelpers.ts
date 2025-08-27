@@ -109,7 +109,7 @@ export const printHelpers = {
             <div class="company-info">
               <h1>Parabellum Groups</h1>
               <p>Abidjan, Côte d'Ivoire</p>
-              <p>+225 XX XX XX XX XX</p>
+              <p>+225 07 07 07 07 07</p>
               <p>contact@parabellum.com</p>
             </div>
             <div class="invoice-title">

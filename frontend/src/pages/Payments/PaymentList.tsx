@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search, Eye, Edit, Trash2, CreditCard, Banknote, Smartphone, Wallet } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { createCrudService } from '../../services/api';
-import { CreatePaymentModal } from '../../components/Modals/CreatePaymentModal';
+import { CreatePaymentModal } from '../../components/Modals/Create/CreatePaymentModal';
 
 const paymentService = createCrudService('payments');
 

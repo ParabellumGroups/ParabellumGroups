@@ -50,7 +50,7 @@ export const PayslipPrint: React.FC<PayslipPrintProps> = ({ salary, onClose }) =
               <div className="text-sm space-y-1">
                 <p><strong>Raison sociale :</strong> Parabellum Groups SARL</p>
                 <p><strong>Adresse :</strong> Abidjan, Côte d'Ivoire</p>
-                <p><strong>Téléphone :</strong> +225 XX XX XX XX XX</p>
+                <p><strong>Téléphone :</strong> +225 07 07 07 07 07</p>
                 <p><strong>Email :</strong> contact@parabellum.com</p>
                 <p><strong>SIRET :</strong> CI-123456789</p>
                 <p><strong>N° CNPS Employeur :</strong> 1234567</p>
@@ -451,7 +451,7 @@ export const PayslipPrint: React.FC<PayslipPrintProps> = ({ salary, onClose }) =
       </div>
 
       {/* Styles d'impression optimisés */}
-      <style jsx>{`
+      <style>{`
         @media print {
           body { 
             margin: 0; 

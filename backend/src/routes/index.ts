@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import type { Router as ExpressRouter } from 'express';
 import { logger } from '../config/logger';
 
 // Import des routes
@@ -25,7 +26,7 @@ import materielRoutes from './materiels';
 import rapportRoutes from './rapports';
 import notificationRoutes from './notifications';
 
-const router = Router();
+const router: ExpressRouter = Router();
 
 // Route de santé de l'API
 router.get('/health', (req, res) => {

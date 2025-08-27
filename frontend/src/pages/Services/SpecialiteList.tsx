@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search, Edit, Trash2, Eye, Wrench, Users } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { createCrudService } from '../../services/api';
-import { CreateSpecialiteModal } from '../../components/Modals/CreateSpecialiteModal';
+import { CreateSpecialiteModal } from '../../components/Modals/Create/CreateSpecialiteModal';
 
 const specialiteService = createCrudService('specialites');
 

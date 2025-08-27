@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { createCrudService } from '../../services/api';
-import { CreateMessageModal } from '../../components/Modals/CreateMessageModal';
+import { CreateMessageModal } from '../../components/Modals/Create/CreateMessageModal';
 
 const messageService = createCrudService('messages');
 

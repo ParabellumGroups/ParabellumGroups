@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search, Filter, Edit, Trash2, Eye, Package, Zap, RotateCcw } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { createCrudService } from '../../services/api';
-import { CreateProductModal } from '../../components/Modals/CreateProductModal';
+import { CreateProductModal } from '../../components/Modals/Create/CreateProductModal';
 
 const productService = createCrudService('products');
 

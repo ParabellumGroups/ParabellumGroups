@@ -1,4 +1,4 @@
-// ✅ IMPORTANT : Ces deux lignes doivent être les toutes premières
+// ✅  : Ces deux lignes doivent être les toutes premières
 import dotenv from 'dotenv';
 dotenv.config({ path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env' });
 

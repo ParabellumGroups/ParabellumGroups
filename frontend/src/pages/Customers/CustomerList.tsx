@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Plus, Search, Filter, Edit, Trash2, Eye } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { createCrudService } from '../../services/api';
-import { CreateCustomerModal } from '../../components/Modals/CreateCustomerModal';
+import { CreateCustomerModal } from '../../components/Modals/Create/CreateCustomerModal';
 
 const customerService = createCrudService('customers');
 

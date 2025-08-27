@@ -4,9 +4,32 @@ import { AuthenticatedRequest } from '../types';
 
 const prisma = new PrismaClient();
 
-export const getDashboardStats = async (req: AuthenticatedRequest, res: Response) => {
+export const getReports = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { serviceId } = req.query;
+    const { endpoint } = req.query;
+
+    if (endpoint === 'dashboard') {
+      return await getDashboardStatsInternal(req, res);
+    } else if (endpoint === 'pipeline') {
+      return res.json({ success: true, data: await getPipelineData(req.query) });
+    } else if (endpoint === 'sales') {
+      return res.json({ success: true, data: await getSalesByUser(req.query) });
+    } else {
+      return res.status(400).json({ success: false, message: 'Endpoint de rapport non valide.' });
+    }
+  } catch (error) {
+    console.error('Erreur lors de la récupération des rapports:', error);
+    res.status(500).json({ success: false, message: 'Erreur interne du serveur' });
+  }
+};
+
+export const getDashboardStatsInternal = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { serviceId, endpoint, period } = req.query;
+    
+
+
+    
     const currentDate = new Date();
     const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
     const startOfYear = new Date(currentDate.getFullYear(), 0, 1);

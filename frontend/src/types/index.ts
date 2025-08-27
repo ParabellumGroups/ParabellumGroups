@@ -7,6 +7,7 @@ export interface NavigationItem {
   icon: React.ComponentType<any>;
   permission?: string;
   children?: NavigationItem[];
+  isCategory?: boolean;
 }
 
 export interface FormField {

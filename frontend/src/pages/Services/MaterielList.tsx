@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search, Edit, Trash2, Eye, Package, AlertTriangle, TrendingUp, TrendingDown } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { createCrudService } from '../../services/api';
-import { CreateMaterielModal } from '../../components/Modals/CreateMaterielModal';
+import { CreateMaterielModal } from '../../components/Modals/Create/CreateMaterielModal';
 
 const materielService = createCrudService('materiels');
 

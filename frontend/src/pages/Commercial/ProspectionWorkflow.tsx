@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { createCrudService } from '../../services/api';
-import { CreateProspectModal } from '../../components/Modals/CreateProspectModal';
+import { CreateProspectModal } from '../../components/Modals/Create/CreateProspectModal';
 import { ProspectionFlowChart } from '../../components/Commercial/ProspectionFlowChart';
 
 const prospectService = createCrudService('prospects');
@@ -134,7 +134,7 @@ export const ProspectionWorkflow: React.FC = () => {
       {/* En-tête */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Workflow de Prospection Commerciale</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Prospection Commerciale</h1>
           <p className="text-gray-600">Gérez votre pipeline de prospection étape par étape</p>
         </div>
         <div className="flex items-center space-x-3">

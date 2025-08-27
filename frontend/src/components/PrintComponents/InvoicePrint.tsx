@@ -25,7 +25,7 @@ export const InvoicePrint: React.FC<InvoicePrintProps> = ({ invoice, onClose }) 
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Parabellum Groups</h1>
             <p className="text-gray-600">Abidjan, Côte d'Ivoire</p>
-            <p className="text-gray-600">+225 XX XX XX XX XX</p>
+            <p className="text-gray-600">+225 07 07 07 07 07</p>
             <p className="text-gray-600">contact@parabellum.com</p>
           </div>
           <div className="text-right">

@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search, Edit, Trash2, Eye, FileText, Calendar, AlertCircle, CheckCircle, Clock } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { createCrudService } from '../../services/api';
-import { CreateMissionModal } from '../../components/Modals/CreateMissionModal';
+import { CreateMissionModal } from '../../components/Modals/Create/CreateMissionModal';
 
 const missionService = createCrudService('missions');
 

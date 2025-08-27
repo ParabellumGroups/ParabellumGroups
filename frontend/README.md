@@ -17,7 +17,7 @@ ParrabellumGroups/
 ### Prérequis
 - Node.js 18+
 - PostgreSQL
-- npm ou yarn
+- pnpm ou yarn
 
 ### Installation
 
@@ -30,20 +30,20 @@ cd ParrabellumGroups
 2. **Backend**
 ```bash
 cd Back-end
-npm install
+ppnpm install
 cp .env.example .env
 # Configurer la base de données dans .env
-npm run db:push
-npm run db:seed
-npm run dev
+pnpm run db:push
+pnpm run db:seed
+pnpm run dev
 ```
 
 3. **Frontend**
 ```bash
 cd ../
-npm install
+pnpm install
 cp .env.example .env
-npm run dev
+pnpm run dev
 ```
 
 ## 🔐 Authentification

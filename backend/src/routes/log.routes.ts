@@ -1,7 +1,8 @@
-import { Router } from 'express'; // Assurez-vous que Router est bien importé
+import { Router } from 'express';
+import type { Router as ExpressRouter } from 'express';
 import { listLogFiles, getLogFileContent } from '../controllers/admin.controller';
 
-const router: Router = Router();
+const router: ExpressRouter = Router();
 
 /**
  * @swagger

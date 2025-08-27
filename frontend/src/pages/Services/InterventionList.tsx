@@ -19,8 +19,10 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { createCrudService } from '../../services/api';
-import { CreateInterventionModal } from '../../components/Modals/CreateInterventionModal';
+import { CreateInterventionModal } from '../../components/Modals/Create/CreateInterventionModal';
 import { InterventionDetailModal } from '../../components/Modals/InterventionDetailModal';
+import { EditInterventionModal } from '../../components/Modals/EditInterventionModal';
+
 
 const interventionService = createCrudService('interventions');
 
@@ -38,9 +40,16 @@ export const InterventionList: React.FC = () => {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [missionFilter, setMissionFilter] = useState('');
+  
+  // États pour les modals
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [selectedIntervention, setSelectedIntervention] = useState<any>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const [showAssignModal, setShowAssignModal] = useState(false);
+  const [showRapportModal, setShowRapportModal] = useState(false);
+  const [showMaterielModal, setShowMaterielModal] = useState(false);
+  
+  const [selectedIntervention, setSelectedIntervention] = useState<any>(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['interventions', page, search, statusFilter, missionFilter],
@@ -139,11 +148,41 @@ export const InterventionList: React.FC = () => {
     setShowDetailModal(true);
   };
 
+  const handleEditIntervention = (intervention: any) => {
+    setSelectedIntervention(intervention);
+    setShowEditModal(true);
+  };
+
+  const handleAssignTechnicien = (intervention: any) => {
+    setSelectedIntervention(intervention);
+    setShowAssignModal(true);
+  };
+
+  const handleCreateRapport = (intervention: any) => {
+    setSelectedIntervention(intervention);
+    setShowRapportModal(true);
+  };
+
+  const handleSortieMateriel = (intervention: any) => {
+    setSelectedIntervention(intervention);
+    setShowMaterielModal(true);
+  };
+
   const formatDuration = (minutes: number) => {
     if (!minutes) return 'N/A';
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     return `${hours}h${mins.toString().padStart(2, '0')}`;
+  };
+
+  const closeAllModals = () => {
+    setShowCreateModal(false);
+    setShowEditModal(false);
+    setShowDetailModal(false);
+    setShowAssignModal(false);
+    setShowRapportModal(false);
+    setShowMaterielModal(false);
+    setSelectedIntervention(null);
   };
 
   return (
@@ -396,19 +435,21 @@ export const InterventionList: React.FC = () => {
                         </button>
                       )}
                       
-                      {hasPermission('rapports.read') && (
+                      {hasPermission('rapports.create') && (
                         <button 
+                          onClick={() => handleCreateRapport(intervention)}
                           className="text-purple-600 hover:text-purple-900"
-                          title="Rapports"
+                          title="Créer rapport"
                         >
                           <FileText className="h-4 w-4" />
                         </button>
                       )}
                       
-                      {hasPermission('materiels.read') && (
+                      {hasPermission('materiels.update') && (
                         <button 
+                          onClick={() => handleSortieMateriel(intervention)}
                           className="text-orange-600 hover:text-orange-900"
-                          title="Matériel"
+                          title="Sortie matériel"
                         >
                           <Package className="h-4 w-4" />
                         </button>
@@ -416,10 +457,21 @@ export const InterventionList: React.FC = () => {
                       
                       {hasPermission('interventions.update') && (
                         <button 
+                          onClick={() => handleEditIntervention(intervention)}
                           className="text-indigo-600 hover:text-indigo-900"
                           title="Modifier"
                         >
                           <Edit className="h-4 w-4" />
+                        </button>
+                      )}
+                      
+                      {hasPermission('interventions.update') && (
+                        <button 
+                          onClick={() => handleAssignTechnicien(intervention)}
+                          className="text-teal-600 hover:text-teal-900"
+                          title="Assigner technicien"
+                        >
+                          <Users className="h-4 w-4" />
                         </button>
                       )}
                       
@@ -498,14 +550,21 @@ export const InterventionList: React.FC = () => {
       {/* Modales */}
       <CreateInterventionModal 
         isOpen={showCreateModal} 
-        onClose={() => setShowCreateModal(false)} 
+        onClose={closeAllModals} 
+      />
+      
+      <EditInterventionModal
+        isOpen={showEditModal}
+        onClose={closeAllModals}
+        intervention={selectedIntervention}
       />
       
       <InterventionDetailModal
         isOpen={showDetailModal}
-        onClose={() => setShowDetailModal(false)}
+        onClose={closeAllModals}
         intervention={selectedIntervention}
       />
+      
     </div>
   );
 };

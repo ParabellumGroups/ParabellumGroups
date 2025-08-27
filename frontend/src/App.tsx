@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './hooks/useAuth';
 import { DarkModeProvider } from './hooks/useDarkMode';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Layout } from './components/Layout/Layout';
 import { Login } from './pages/Login';
@@ -46,21 +47,31 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <DarkModeProvider>
         <AuthProvider>
-          <Router>
-            <Routes>
-              {/* Route de connexion */}
-              <Route path="/login" element={<Login />} />
-              
-              {/* Routes protégées */}
-              <Route
-                path="/*"
-                element={
-                  <ProtectedRoute>
-                    <Layout />
-                  </ProtectedRoute>
-                }
-              >
-                <Route path="dashboard" element={<Dashboard />} />
+          <ErrorBoundary>
+            <Router>
+              <Routes>
+                {/* Route de connexion */}
+                <Route path="/login" element={<Login />} />
+                
+                {/* Routes protégées */}
+                <Route
+                  path="/*"
+                  element={
+                    <ProtectedRoute>
+                      <Layout />
+                    </ProtectedRoute>
+                  }
+                >
+                  <Route path="dashboard" element={
+                    <ErrorBoundary fallback={
+                      <div className="p-6 text-center">
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Erreur Dashboard</h2>
+                        <p className="text-gray-600 dark:text-gray-300">Le tableau de bord ne peut pas se charger.</p>
+                      </div>
+                    }>
+                      <Dashboard />
+                    </ErrorBoundary>
+                  } />
                 
                 {/* Redirection par défaut vers le dashboard */}
                 <Route path="" element={<Navigate to="/dashboard" replace />} />
@@ -265,7 +276,8 @@ function App() {
               {/* Route 404 */}
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Routes>
-          </Router>
+            </Router>
+          </ErrorBoundary>
         </AuthProvider>
       </DarkModeProvider>
     </QueryClientProvider>

@@ -102,7 +102,7 @@ class CacheService {
       if (!this.isAvailable()) return false;
 
       const serializedValue = JSON.stringify(value);
-      
+
       if (ttlSeconds) {
         await this.client!.setex(key, ttlSeconds, serializedValue);
       } else {
@@ -204,7 +204,7 @@ class CacheService {
 
       const info = await this.client!.info('memory');
       const keyspace = await this.client!.info('keyspace');
-      
+
       return {
         status: 'connected',
         memory: info,
@@ -213,7 +213,10 @@ class CacheService {
       };
     } catch (error) {
       logger.error('❌ Erreur lors de la récupération des stats:', error);
-      return { status: 'error', error: error.message };
+      return {
+        status: 'error',
+        error: error instanceof Error ? error.message : 'Unknown error occurred'
+      };
     }
   }
 
@@ -240,27 +243,27 @@ export const CACHE_KEYS = {
   // Utilisateurs
   USER_PROFILE: (userId: number) => `user:profile:${userId}`,
   USER_PERMISSIONS: (userId: number) => `user:permissions:${userId}`,
-  
+
   // Clients
-  CUSTOMER_LIST: (serviceId?: number, page?: number) => 
+  CUSTOMER_LIST: (serviceId?: number, page?: number) =>
     `customers:list:${serviceId || 'all'}:${page || 1}`,
   CUSTOMER_DETAIL: (customerId: number) => `customer:detail:${customerId}`,
-  
+
   // Devis
-  QUOTE_LIST: (serviceId?: number, status?: string) => 
+  QUOTE_LIST: (serviceId?: number, status?: string) =>
     `quotes:list:${serviceId || 'all'}:${status || 'all'}`,
   QUOTE_DETAIL: (quoteId: number) => `quote:detail:${quoteId}`,
-  
+
   // Factures
-  INVOICE_LIST: (serviceId?: number, status?: string) => 
+  INVOICE_LIST: (serviceId?: number, status?: string) =>
     `invoices:list:${serviceId || 'all'}:${status || 'all'}`,
   INVOICE_DETAIL: (invoiceId: number) => `invoice:detail:${invoiceId}`,
-  
+
   // Rapports
   DASHBOARD_STATS: (serviceId?: number) => `dashboard:stats:${serviceId || 'all'}`,
-  SALES_REPORT: (period: string, serviceId?: number) => 
+  SALES_REPORT: (period: string, serviceId?: number) =>
     `reports:sales:${period}:${serviceId || 'all'}`,
-  
+
   // Système
   SERVICES_LIST: 'system:services',
   ROLES_LIST: 'system:roles',
@@ -280,11 +283,11 @@ export const cacheMiddleware = (ttl: number = CACHE_TTL.MEDIUM) => {
   return async (req: any, res: any, next: any) => {
     // Générer une clé de cache basée sur la route et les paramètres
     const cacheKey = `route:${req.method}:${req.originalUrl}:${JSON.stringify(req.query)}`;
-    
+
     try {
       // Vérifier si la réponse est en cache
       const cachedResponse = await cacheService.get(cacheKey);
-      
+
       if (cachedResponse) {
         logger.debug('✅ Réponse servie depuis le cache', { cacheKey });
         return res.json(cachedResponse);
@@ -292,7 +295,7 @@ export const cacheMiddleware = (ttl: number = CACHE_TTL.MEDIUM) => {
 
       // Intercepter la réponse pour la mettre en cache
       const originalSend = res.send;
-      res.send = function(data: any) {
+      res.send = function (data: any) {
         // Mettre en cache seulement les réponses de succès
         if (res.statusCode >= 200 && res.statusCode < 300) {
           cacheService.set(cacheKey, JSON.parse(data), ttl)
